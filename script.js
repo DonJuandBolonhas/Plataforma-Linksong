@@ -6,12 +6,12 @@
 
 /* ---------- Dados de exemplo (mock) ---------- */
 const releases = [
-  { title: "Noites de Verão",   year: 2026, tracks: 1,  category: "single", hue: 265 },
-  { title: "Asfalto Quente",    year: 2025, tracks: 3,  category: "single", hue: 190 },
-  { title: "Rotas Alternativas",year: 2025, tracks: 5,  category: "ep",     hue: 35  },
-  { title: "Eco do Subsolo",    year: 2024, tracks: 6,  category: "ep",     hue: 330 },
-  { title: "Maré Cheia",        year: 2023, tracks: 10, category: "album",  hue: 215 },
-  { title: "Vinil & Poeira",    year: 2022, tracks: 12, category: "album",  hue: 150 },
+  { title: "Ride Into The Storm",   year: 2023, tracks: 1,  category: "single", capa: "ride.jpg"},
+  { title: "And Justice For All",    year: 1988, tracks: 3,  category: "single", capa: "And_Justice_for_All.jpg"},
+  { title: "The Devil In I",year: 2025, tracks: 5,  category: "ep", capa: "The_Devil_In_I.jpg" },
+  { title: "Brave New World",    year: 2000, tracks: 8,  category: "album",  capa: "BNW_iron.jpg"},
+  { title: "Temple Of Shadows", year: 2003, tracks: 10, category: "album", capa: "TempleOfShadowsAngra.jpg" },
+  { title: "The Poison", year: 1998, tracks: 12, category: "album", capa: "poison.jpg"},
 ];
 
 const CATEGORY_LABEL = { single: "Single", ep: "EP", album: "Álbum" };
@@ -29,19 +29,20 @@ const coverPreview= document.getElementById("coverPreview");
 const coverHint   = document.getElementById("coverHint");
 
 /* ---------- Renderização dos cards ---------- */
-function coverArt(hue) {
-  return `
-    <div class="card__cover-art" style="background:
-      radial-gradient(circle at 30% 25%, hsl(${hue} 80% 62%), transparent 60%),
-      linear-gradient(135deg, hsl(${hue} 70% 38%), hsl(${(hue + 50) % 360} 70% 22%));">
+//Essa função gera o visual do card
+function coverArt(capa) {
+
+    return `
+    <div class="card__cover-art" style="background-image: url('${capa}'); background-size: cover; background-position: center;">
       <svg viewBox="0 0 24 24" width="54" height="54" fill="none" stroke="#fff" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
         <circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="2.5"/>
       </svg>
     </div>`;
+
 }
 
 function cardTemplate(r) {
-  const cover = r.cover ? `<img src="${r.cover}" alt="Capa de ${r.title}">` : coverArt(r.hue ?? 260);
+  const cover = r.cover ? `<img src="${r.cover}" alt="capa de ${r.title}">` : coverArt(r.capa ?? 260);
   return `
     <article class="card" data-category="${r.category}">
       <div class="card__cover">
