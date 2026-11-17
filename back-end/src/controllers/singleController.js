@@ -1,98 +1,87 @@
-
-const supabase = require('../config/supabase');
+const supabase = require("../config/supabase");
 
 // LISTAR TODOS OS SINGLES
 async function listarSingles(req, res) {
+  const { data, error } = await supabase.from("single").select("*");
 
-    const { data, error } = await supabase
-        .from('singles')
-        .select('*');
+  if (error) {
+    return res.status(400).json({ erro: error.message });
+  }
 
-    if (error) {
-        return res.status(400).json({ erro: error.message });
-    }
-
-    res.json(data);
+  res.json(data);
 }
-
 
 // CADASTRAR UM SINGLE
 async function cadastrarSingle(req, res) {
+  const { nome } = req.body;
 
-    const { nome } = req.body;
+  if (!nome || !nome.trim()) {
+    return res.status(400).json({
+      erro: "O nome é obrigatório!",
+    });
+  }
 
-    if (!nome || !nome.trim()) {
-        return res.status(400).json({
-            erro: 'O nome é obrigatório!'
-        });
-    }
+  const { data, error } = await supabase
+    .from("single")
+    .insert([{ nome: nome.trim() }])
+    .select();
 
-    const { data, error } = await supabase
-        .from('singles')
-        .insert([{ nome: nome.trim() }])
-        .select();
+  if (error) {
+    return res.status(400).json({ erro: error.message });
+  }
 
-    if (error) {
-        return res.status(400).json({ erro: error.message });
-    }
-
-    res.status(201).json(data);
+  res.status(201).json(data);
 }
-
 
 // BUSCAR SINGLE PELO ID
 async function buscarSingle(req, res) {
+  const { id } = req.params;
 
-    const { id } = req.params;
+  const { data, error } = await supabase
+    .from("single")
+    .select("*")
+    .eq("id", id)
+    .maybeSingle();
 
-    const { data, error } = await supabase
-        .from('singles')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
+  if (error) {
+    return res.status(400).json({ erro: error.message });
+  }
 
-    if (error) {
-        return res.status(400).json({ erro: error.message });
-    }
+  if (!data) {
+    return res.status(404).json({
+      erro: "Single não encontrado!",
+    });
+  }
 
-    if (!data) {
-        return res.status(404).json({
-            erro: 'Single não encontrado!'
-        });
-    }
-
-    res.json(data);
+  res.json(data);
 }
-
 
 // EXCLUIR SINGLE
 async function excluirSingle(req, res) {
+  const { id } = req.params;
 
-    const { id } = req.params;
+  const { data, error } = await supabase
+    .from("single")
+    .delete()
+    .eq("id", id)
+    .select();
 
-    const { data, error } = await supabase
-        .from('singles')
-        .delete()
-        .eq('id', id)
-        .select();
+  if (error) {
+    return res.status(400).json({ erro: error.message });
+  }
 
-    if (error) {
-        return res.status(400).json({ erro: error.message });
-    }
+  if (!data || data.length === 0) {
+    return res.status(404).json({
+      erro: "Single não encontrado!",
+    });
+  }
 
-    if (!data || data.length === 0) {
-        return res.status(404).json({
-            erro: 'Single não encontrado!'
-        });
-    }
-
-    res.json({ mensagem: 'Single excluído com sucesso!' });
+  res.json({ mensagem: "Single excluído com sucesso!" });
 }
 
-
 module.exports = {
-    listarSingles,
-    cadastrarSingle,
-    buscarSingle,
-    excluirSingle
+  listarSingles,
+  cadastrarSingle,
+  buscarSingle,
+  excluirSingle,
 };
