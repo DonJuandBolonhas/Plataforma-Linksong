@@ -14,10 +14,11 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-const singleRoutes = require("./routes/singleRoutes");
+const midiaRoutes = require("./routes/midiaRoutes");
 
-app.use("/api/single", singleRoutes);
+app.use("/api/midia", midiaRoutes);
 
 app.listen(process.env.PORT || 3000, () => {
   console.log("Servidor rodando!");
 });
+

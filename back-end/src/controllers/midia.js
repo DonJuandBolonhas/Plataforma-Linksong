@@ -1,8 +1,8 @@
 const supabase = require("../config/supabase");
 
-// LISTAR TODOS OS SINGLES
-async function listarSingles(req, res) {
-  const { data, error } = await supabase.from("single").select("*");
+// LISTAR TODOS OS midiaS
+async function listarmidias(req, res) {
+  const { data, error } = await supabase.from("midia").select("*");
 
   if (error) {
     return res.status(400).json({ erro: error.message });
@@ -11,8 +11,8 @@ async function listarSingles(req, res) {
   res.json(data);
 }
 
-// CADASTRAR UM SINGLE
-async function cadastrarSingle(req, res) {
+// CADASTRAR UM midia
+async function cadastrarmidia(req, res) {
   const { nome } = req.body;
 
   if (!nome || !nome.trim()) {
@@ -22,7 +22,7 @@ async function cadastrarSingle(req, res) {
   }
 
   const { data, error } = await supabase
-    .from("single")
+    .from("midia")
     .insert([{ nome: nome.trim() }])
     .select();
 
@@ -33,12 +33,12 @@ async function cadastrarSingle(req, res) {
   res.status(201).json(data);
 }
 
-// BUSCAR SINGLE PELO ID
-async function buscarSingle(req, res) {
+// BUSCAR midia PELO ID
+async function buscarmidia(req, res) {
   const { id } = req.params;
 
   const { data, error } = await supabase
-    .from("single")
+    .from("midia")
     .select("*")
     .eq("id", id)
     .maybeSingle();
@@ -49,19 +49,19 @@ async function buscarSingle(req, res) {
 
   if (!data) {
     return res.status(404).json({
-      erro: "Single não encontrado!",
+      erro: "midia não encontrado!",
     });
   }
 
   res.json(data);
 }
 
-// EXCLUIR SINGLE
-async function excluirSingle(req, res) {
+// EXCLUIR midia
+async function excluirmidia(req, res) {
   const { id } = req.params;
 
   const { data, error } = await supabase
-    .from("single")
+    .from("midia")
     .delete()
     .eq("id", id)
     .select();
@@ -72,16 +72,16 @@ async function excluirSingle(req, res) {
 
   if (!data || data.length === 0) {
     return res.status(404).json({
-      erro: "Single não encontrado!",
+      erro: "midia não encontrado!",
     });
   }
 
-  res.json({ mensagem: "Single excluído com sucesso!" });
+  res.json({ mensagem: "midia excluído com sucesso!" });
 }
 
 module.exports = {
-  listarSingles,
-  cadastrarSingle,
-  buscarSingle,
-  excluirSingle,
+  listarmidias,
+  cadastrarmidia,
+  buscarmidia,
+  excluirmidia,
 };
